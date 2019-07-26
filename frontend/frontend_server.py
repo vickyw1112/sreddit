@@ -97,12 +97,12 @@ def create_backend_url_js(url):
         print(BACKEND_URL_JS_FILE, 'created')
     except OSError as e:
         print(e, file=sys.stderr)
-        print("are you running server.py in the frontend directory?", file=sys.stderr)
+        print("are you running frontend_server.py in the frontend directory?", file=sys.stderr)
         sys.exit(1)
 
 if __name__ == '__main__':
     if not os.path.exists('index.html'):
-        print("are you running server.py in the frontend directory?", file=sys.stderr)
+        print("are you running frontend_server.py in the frontend directory?", file=sys.stderr)
         sys.exit(1)
     backend_url = sys.argv[1] if sys.argv[1:] else 'http://127.0.0.1:5000'
     create_backend_url_js(backend_url)

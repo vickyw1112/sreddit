@@ -13,10 +13,10 @@
 To start up the frontend server which simply servers everything under the frontend folder:
 
 ```
-python3 server.py
+python3 frontend_server.py
 ```
 
-This will print out a username, password and launch up a static server at localhost:8080, if something else on your network is using 8080 you will need to change this in server.py to some other port, try 8081 for example.
+This will print out a username, password and launch up a static server at localhost:8080, if something else on your network is using 8080 it will start it on some other port.
 
 ```
 Live at http://localhost:8080
