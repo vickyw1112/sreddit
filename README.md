@@ -241,7 +241,7 @@ The user interface looks good, is performant, makes logical sense, and is usable
 Users can receive push notifications when a user they follow posts an image. Notification can be accessed at (`GET /latest`)
 
 **Offline Access**
-Users can access the "Instacram" at all times by using Web Workers to cache the page (and previous content) locally.
+Users can access the "Seddit" at all times by using Web Workers to cache the page (and previous content) locally.
 
 **Fragment based URL routing**
 Users can access different pages using URL fragments:
