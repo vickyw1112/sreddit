@@ -66,7 +66,6 @@ class Dummy_Post(Resource):
         u_username = u[1]
         if not j or not id:
             abort(400, 'Malformed request')
-        print(id)
         id = int(id)
         if not db.exists('POST').where(id=id):
             abort(400, 'Malformed request')
@@ -175,11 +174,9 @@ class Vote(Resource):
             abort(400, 'Malformed request')
         p = db.select('POST').where(id=id).execute()
         votes = text_list_to_set(p[5],process_f=lambda x: int(x))
-        print('votes: {}'.format(votes))
         if not u[0] in votes:
             abort(400, 'Malformed request')
         votes.discard(u[0])
-        print('votes: {}'.format(votes))
         votes = set_to_text_list(votes)
         db.update('POST').set(likes=votes).where(id=id).execute()
         return {

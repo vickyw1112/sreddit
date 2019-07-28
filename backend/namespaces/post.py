@@ -164,7 +164,7 @@ class Post(Resource):
         p = db.select('POST').where(id=id).execute()
         if p[1] != u[1]:
             abort(403,'You Are Unauthorized To Make That Request')
-        comment_list = text_list_to_set(p[7])
+        comment_list = text_list_to_set(p[8])
         [db.delete('COMMENT').where(id=c_id).execute() for c_id in comment_list]
         db.delete('POST').where(id=id).execute()
         return {
@@ -226,7 +226,7 @@ class Vote(Resource):
         if not db.exists('POST').where(id=id):
             abort(400, 'Malformed request')
         p = db.select('POST').where(id=id).execute()
-        votes = text_list_to_set(p[4],process_f=lambda x:int(x))
+        votes = text_list_to_set(p[5],process_f=lambda x:int(x))
         votes.add(u[0])
         votes = set_to_text_list(votes)
         db.update('POST').set(likes=votes).where(id=id).execute()
@@ -256,7 +256,9 @@ class Vote(Resource):
         if not db.exists('POST').where(id=id):
             abort(400, 'Malformed request')
         p = db.select('POST').where(id=id).execute()
-        votes = text_list_to_set(p[4],process_f=lambda x: int(x))
+        votes = text_list_to_set(p[5],process_f=lambda x: int(x))
+        if not u[0] in votes:
+            abort(400, 'Malformed request')
         votes.discard(u[0])
         votes = set_to_text_list(votes)
         db.update('POST').set(likes=votes).where(id=id).execute()
@@ -300,7 +302,7 @@ class Comment(Resource):
             published=str(time.time())
         ).execute()
         p = db.select('POST').where(id=id).execute()
-        comment_list = text_list_to_set(p[7],process_f=lambda x: int(x))
+        comment_list = text_list_to_set(p[8],process_f=lambda x: int(x))
         comment_list.add(comment_id)
         comment_list = set_to_text_list(comment_list)
         db.update('POST').set(comments=comment_list).where(id=id).execute()
