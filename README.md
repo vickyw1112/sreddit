@@ -238,18 +238,21 @@ As mentioned earlier, a subseddit is denoted by a "s/" in front of the subseddit
 The user interface looks good, is performant, makes logical sense, and is usable. 
 
 **Push Notifications**
-Users can receive push notifications when a user they follow posts an image. Notification can be accessed at (`GET /latest`)
+Users can receive push notifications when a user they follow posts an image. There is no endpoint or websocket provided, we expect you to figure out how to do this given the existing endpoints. Notice that since we do not give you a websocket (nor teach it in the course) we are happy for you to use polling ot achieve this, i.e check if there is anything to notify the user of every 5 or so seconds.
+
+The delay is up to you, but remember you want it to look semi live without 
+overwhelming the event queue.
 
 **Offline Access**
 Users can access the "Seddit" at all times by using Web Workers to cache the page (and previous content) locally.
-
+d
 **Fragment based URL routing**
 Users can access different pages using URL fragments:
 
 ```
-/#profile=me
+/#profile=1
 /#feed
-/#profile=janecitizen
+/#profile=420
 ```
 
 # FAQ
