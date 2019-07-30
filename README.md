@@ -176,6 +176,8 @@ Allow an option for a logged in user to see all the comments on a post. Same as 
 A logged in user can upvote a post on their feed and trigger a api request (`PUT /post/vote`)
 For now it's ok if the upvote doesn't show up until the page is refreshed.
 
+In addition the user can also retract their upvote, you can do this via `DELETE /post/vote`
+
 **Post new content**
 Logged in users can upload and post new content from a [modal](https://www.webopedia.com/TERM/M/modal_window.html) or seperate page via (`POST /post`). The uploaded content can either be text, an image, or a combination of both.
 
@@ -185,7 +187,7 @@ Note users can ignore this if they properly implement Level 3's Infinite Scroll.
 
 **Profile**
 Logged in users can see their own profile information such as username, number of posts, 
-number of upvotes across all posts, profile pic. Get this information from (`GET /user`)
+number of upvotes across all posts. Get this information from (`GET /user`)
 
 ## Level 3
 Level 3 focuses on more advanced features that will take time to implement and will
@@ -196,7 +198,7 @@ Instead of pagination, users an infinitely scroll through the "subseddit" they a
 For infinite scroll to be properly implemented you need to progressively load posts as you scroll. 
 
 **Comments**
-Logged in users can write comments on "posts" via (`POST /post/comment`)
+Logged in users can write comments on "posts" via (`PUT /post/comment`)
 
 **Live Update**
 If a logged in user upvotes a post or comments on a post, the posts upvotes and comments should
