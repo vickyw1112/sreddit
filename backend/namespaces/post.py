@@ -131,7 +131,7 @@ class Post(Resource):
             updated['src'] = src
             updated['thumbnail'] = shrink(src)
         if title:
-            updated['title'] = src
+            updated['title'] = title
         db.update('POST').set(**updated).where(id=id).execute()
         return {
             'message': 'success'
