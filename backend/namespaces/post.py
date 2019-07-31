@@ -27,7 +27,7 @@ class Global(Resource):
 
         latest_posts = db.raw(q, [])
         latest_posts = [format_post(row) for row in latest_posts]
-        latest_posts.sort(reverse=True,key=lambda x: int(x["meta"]["published"]))
+        latest_posts.sort(reverse=True,key=lambda x: int(float(x["meta"]["published"])))
 
         return {
             'posts': latest_posts
