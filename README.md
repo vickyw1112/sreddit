@@ -227,8 +227,8 @@ Add just the count of followers / follows to everyones public user page
 Let a logged in user update a post they made or delete it via (`DELETE /post`) or (`PUT /post`)
 
 **Search functionality**
-Let a logged in user search for a post, user or subseddit. You'll have to potentially combine a 
-few different endpoint responses to allow this. 
+Let a logged in user search for a post made by any user that they follow. You'll have to 
+potentially combine a few different endpoint responses to allow this. 
 
 ## Level 4
 This set of tasks is an extension beyond the previous levels and should only be attempted once the previous levels have been completed.
