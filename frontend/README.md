@@ -41,6 +41,7 @@ src
   - api.js    # Some example code for your api logic
 
 styles
+  - post.css
   - provided.css  # some sample css we've provided (add more stylesheets as you please)
 ```
 

@@ -43,7 +43,7 @@ export function confirm_response_has_keys(url, method, body, keys, flags) {
     return fetch(`${API_URL}/${url}`, options)
         .then(r => r.json())
         .then(r => {
-            keys.map(k => chai.expect(r).to.have.property(k))
+            keys.forEach(k => chai.expect(r).to.have.property(k))
         })
 }
 
@@ -103,25 +103,25 @@ export function reset() {
     fetch(`${API_URL}/soft-reset`);
 }
 
-export function looks_like_feed(endpoint, namespace) {
-    if (!namespace) namespace = 'default';
+export function looks_like_feed(endpoint, namespace = 'default') {
     
     return fetch(`${API_URL}/${endpoint}`, {
         headers: {
             'Authorization': `Token ${auth_tokens[namespace]}`
         }
-    }).then(r => r.json())
-        .then(r => {
-            chai.expect(r).to.have.property("posts")
-            for(const post of r.posts) {
-                chai.expect(post).to.have.property("id");
-                chai.expect(post).to.have.property("title");
-                chai.expect(post).to.have.property("comments");
-                chai.expect(post).to.have.property("image");
-                chai.expect(post).to.have.property("thumbnail");
-                chai.expect(post).to.have.property("text");
-                chai.expect(post).to.have.property("meta");
-                chai.expect(post.meta).to.have.property("subseddit");
-            }
-        })
+    })
+    .then(r => r.json())
+    .then(r => {
+        chai.expect(r).to.have.property("posts")
+        for(const post of r.posts) {
+            chai.expect(post).to.have.property("id");
+            chai.expect(post).to.have.property("title");
+            chai.expect(post).to.have.property("comments");
+            chai.expect(post).to.have.property("image");
+            chai.expect(post).to.have.property("thumbnail");
+            chai.expect(post).to.have.property("text");
+            chai.expect(post).to.have.property("meta");
+            chai.expect(post.meta).to.have.property("subseddit");
+        }
+    })
 }

@@ -1,4 +1,4 @@
-import {confirm_code, update_auth, reset} from './globals.js';
+import {confirm_code, update_auth, reset, looks_like_feed} from './globals.js';
 
 describe('API tests - Post endpoints', function() {
     const jeff = {
@@ -145,6 +145,13 @@ describe('API tests - Post endpoints', function() {
                 .then(() => confirm_code(`post/comment/?id=` + resp.post_id, 'PUT', sample_comment, 200, put_flags))));
     it('returns a 400 when commenting on a post that does not exist',
         () => confirm_code(`post/comment/?id=9999`, 'PUT', sample_comment, 400, put_flags));
+
+    it('returns 200 when params are included in feed',
+        () => looks_like_feed(`user/feed/?p=2&n=22`));
+    it('returns 200 for /post/public',
+        () => looks_like_feed(`post/public`));
+    it('returns 200 for /used/feed',
+        () => looks_like_feed(`user/feed`));
     
     after(reset);
   })

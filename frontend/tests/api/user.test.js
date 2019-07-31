@@ -135,6 +135,10 @@ describe('API tests - User Endpoints', function() {
             () => looks_like_feed(`user/feed?p=1`))
         it('returns correct feed with supplied n and p',
             () => looks_like_feed(`user/feed?n=4&p=2`))
+        it('returns correct feed with n > 10 and p',
+            () => looks_like_feed(`user/feed?n=15&p=1`))
+        it('returns correct feed with supplied n < 10 and p',
+            () => looks_like_feed(`user/feed?n=8&p=2`))
 
         after(reset);
     });
