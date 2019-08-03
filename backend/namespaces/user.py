@@ -18,7 +18,7 @@ class User(Resource):
         Gets the information for the supplied user, if neither id nor username is specified the
         user corresponding to the supplied auth token's information is returned.
         If both are supplied the id is used first and on failure the username is used.
-        If all supplied forms of identification are invalid the request is considered malformed.
+        If either supplied form of identification is invalid the request is considered malformed and may be rejected.
         The response object contains a list of user_ids of the user following
         the target user and the total number of people who follow the target user.
         These are contained in the variables following and followed_num respectively.
