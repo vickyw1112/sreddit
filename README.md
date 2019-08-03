@@ -20,7 +20,7 @@ Some of the skills/concepts this assignment aims to test (and build upon):
 * Fetching data from an API
 * Infinite scroll
 * CSS Animations
-* Web Workers
+* Web Workers / Service Workers
 * Push Notifications (Polling)
 * Offline Support
 * Routing (URL fragment based routing)
@@ -246,7 +246,7 @@ The delay is up to you, but remember you want it to look semi live without
 overwhelming the event queue.
 
 **Offline Access**
-Users can access the "Seddit" at all times by using Web Workers to cache the page (and previous content) locally.
+Users can access the "Seddit" at all times by using Service Workers to cache the page (and previous content) locally.
 d
 **Fragment based URL routing**
 Users can access different pages using URL fragments:
