@@ -10,6 +10,10 @@ CORS(app)
 @app.route('/soft-reset', strict_slashes=False)
 def reset():
     db.raw("DELETE FROM USERS WHERE USERNAME LIKE \"TESTERELLA%\"")
+    db.raw("DELETE FROM POSTS WHERE AUTHOR LIKE \"TESTERELLA%\"")
+    db.raw("DELETE FROM COMMENTS WHERE AUTHOR LIKE \"TESTERELLA%\"")
+    db.raw("DELETE FROM POSTS WHERE AUTHOR = \"Anon\"")
+    db.raw("DELETE FROM COMMENTS WHERE AUTHOR = \"Anon\"")
     db.raw('DELETE FROM USERS WHERE USERNAME = "Anon"')
     db.raw('INSERT INTO USERS VALUES(1,"Anon","Anon","password","Anon@unsw.edu.au","","",0)')
     return ':)'
