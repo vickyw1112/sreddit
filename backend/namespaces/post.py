@@ -85,7 +85,7 @@ class Post(Resource):
     @posts.response(403, 'Invalid Auth Token / Unauthorized to edit Post')
     @posts.response(400, 'Malformed Request')
     @posts.param('id','the id of the post to update')
-    @posts.expect(auth_details, new_post_details)
+    @posts.expect(auth_details, update_post_details)
     @posts.doc(description='''
         Lets you update a post without changing metadata.
         Published date, upvotes, comments etc. will be left untouched.
