@@ -10,6 +10,14 @@ from flask import request
 
 dummy = api.namespace('dummy', description='Dummy Endpoints for testing')
 
+def shrink(src):
+    size = (150,150)
+    im = Image.open(BytesIO(base64.b64decode(src)))
+    im.thumbnail(size, Image.ANTIALIAS)
+    buffered = BytesIO()
+    im.save(buffered, format='PNG')
+    return base64.b64encode(buffered.getvalue()).decode("utf-8")
+
 @dummy.route('/post', strict_slashes=False)
 class Dummy_Post(Resource):
     @dummy.response(200, 'Success', post_id_details)
@@ -25,30 +33,30 @@ class Dummy_Post(Resource):
         u_username = u[1]
         if not j:
             abort(400, 'Malformed request')
-        (desc,src) = unpack(j,'description_text','src')
+
+        (desc, title, subseddit) = unpack(j, 'text', 'title', 'subseddit')
+        src = j.get('image', None)
         if desc == "":
             abort(400, 'Malformed request')
         thumbnail = ''
-        if src != "":
+
+        if src != None and src != "":
             try:
-                size = (150,150)
-                im = Image.open(BytesIO(base64.b64decode(src)))
-                im.thumbnail(size, Image.ANTIALIAS)
-                buffered = BytesIO()
-                im.save(buffered, format='PNG')
-                thumbnail = base64.b64encode(buffered.getvalue()).decode("utf-8")
+                thumbnail = shrink(src)
             except:
                 abort(400,'Image Data Could Not Be Processed')
         post_id = db.insert('POST').with_values(
             author=u_username,
             description=desc,
+            title=title,
             published=str(time.time()),
             likes='',
             thumbnail=thumbnail,
-            src=src
+            src=src,
+            tag=subseddit
         ).execute()
         return {
-            'post_id': post_id,
+            'post_id': post_id
         }
 
     @dummy.response(200, 'Success')
