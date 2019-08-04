@@ -179,7 +179,7 @@ For now it's ok if the upvote doesn't show up until the page is refreshed.
 In addition the user can also retract their upvote, you can do this via `DELETE /post/vote`
 
 **Post new content**
-Logged in users can upload and post new content from a [modal](https://www.webopedia.com/TERM/M/modal_window.html) or seperate page via (`POST /post`). The uploaded content can either be text, an image, or a combination of both.
+Logged in users can upload and post new content from a [modal](https://www.webopedia.com/TERM/M/modal_window.html) or seperate page via (`POST /post`). The uploaded content can either be text or text and an image.
 
 **Pagination**
 Logged in users can page between sets of results in the feed using the position token with (`GET /user/feed`).
