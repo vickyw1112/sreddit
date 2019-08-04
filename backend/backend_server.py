@@ -4,13 +4,14 @@
 # DO NOT CHANGE THIS FILE
 #
 
-import os, sys
+import os, sys, sqlite3
 
 DATABASE_URL = 'https://cgi.cse.unsw.edu.au/~cs2041/19T2/seddit.sqlite3'
 
 def main(host='127.0.0.1', port=None):
     try:
         create_database()
+        check_database()
         run(host, port)
     except ImportError as e:
         print('ERROR:', e, file=sys.stderr)
@@ -58,6 +59,28 @@ def create_database():
         with open(database_file, "wb") as f:
             f.write(db)
         print(' * [DATABASE WIZARD]', database_file, 'created')
+
+def check_database():
+    database_dir = os.path.join('db')
+    database_file = os.path.join(database_dir, 'test.sqlite3')
+    print(' * [DATABASE WIZARD] Checking Database')
+    conn = sqlite3.connect(database_file)
+    c = conn.cursor()
+    all_users = c.execute("SELECT id,following FROM USERS").fetchall()
+    for u in [x for x in all_users if "0" in str(x[1]).split(",")]:
+        print(f' * [DATABASE WIZARD] ... Patching user {u[0]}')
+        fl = ",".join([str(int(x) + 2) for x in u[1].split(",")])
+        c.execute("UPDATE USERS SET FOLLOWING=? WHERE ID=?",(fl, u[0]))
+    all_posts = c.execute("SELECT id,likes FROM POSTS").fetchall()
+    
+    for p in [x for x in all_posts if "0" in str(x[1]).split(",")]:
+        print(f' * [DATABASE WIZARD] ... Patching post {p[0]}')
+        ll = ",".join([str(int(x) + 2) for x in p[1].split(",")])
+        c.execute("UPDATE POSTS SET LIKES=? WHERE ID=?",(ll, p[0]))
+    conn.commit()
+    c.close()
+    conn.close()
+    print(' * [DATABASE WIZARD] Database Healthy')
 
 def usage():
     print('Usage:', sys.argv[0], '[host]', '[port]')
