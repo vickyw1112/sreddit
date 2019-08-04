@@ -207,12 +207,11 @@ update without requiring a page reload/refresh.
 **Update Profile**
 Users can update their personal profile via (`PUT /user`) E.g:
 * Update email address
-* Update their profile picture
 * Update password
+* etc.
 
 **User Pages**
-Let a logged in user click on a user's name/picture from a post and see a page with the users name, 
-profile pic, and other info.
+Let a logged in user click on a user's name/picture from a post and see a page with the users name and other info.
 The user should also see on this page all posts made by that person across all "subseddits".
 The user should be able to see their own page as well.
 
