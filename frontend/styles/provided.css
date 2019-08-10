@@ -130,3 +130,269 @@ footer > * {
 }
 
 /* Add your styles here */
+.form-wrapper{
+/*
+    position: absolute;
+    right: 30px;
+    left: 30px;
+    Top: 200px;
+    width: 500px;
+    margin: 0 auto;
+    z-index: 99;
+    */
+    text-align: center;
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%; 
+    background-color: rgba(0,0,0,0.4);
+}
+
+form{
+    display: inline-block;
+    width: 500px;
+    background: white;
+    margin: 290px auto 0;
+    padding: 30px;
+    top: 50px;
+    box-sizing: border-box;
+    border: solid 1px #ccc;
+}
+
+form input{
+    width: 90%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    border: 1px soild pink;
+    font-size: 18px;
+}
+button:hover{
+    opacity: 0.8;
+}
+
+.login-button{
+    width: 30%;
+    color: white;
+    background-color: var(--reddit-blue);
+    padding: 10px 20px;
+    margin: 8px 0;
+    border-radius: 4px;
+    border: none;
+    font-weight: bold;
+    position: relative;
+    right: 75px;
+}
+
+.cancel-button{
+    position:relative;
+    left: 73px;
+    width: 30%;
+    color: white;
+    background-color: #DC143C;
+    padding: 10px 20px;
+    margin: 8px 0;
+    border-radius: 4px;
+    border: none;
+    font-weight: bold;
+}
+
+label{
+    position: relative;
+    right: 170px;
+}
+
+.animate {
+    -webkit-animation: animatezoom 0.6s;
+    animation: animatezoom 0.6s
+}
+
+@-webkit-keyframes animatezoom {
+    from {-webkit-transform: scale(0)}
+    to {-webkit-transform: scale(1)}
+}
+
+@keyframes animatezoom {
+    from {transform: scale(0)}
+    to {transform: scale(1)}
+}
+
+.vote{
+    text-align: center;
+}
+
+.top-wrapper{
+    margin-top: 15px;
+    margin-left: 12px;
+    margin-right: 12px;
+}
+
+.suseddit{
+    display: inline-block;
+    font-size: 15px;
+    font-weight: 700;
+    display: inline;
+    line-height: 20px;
+    text-decoration: none;
+    vertical-align: baseline;
+    cursor: pointer;
+}
+
+.dot{
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 9px;
+    line-height: 20px;
+    margin: 0 4px;
+    color: gray;
+}
+
+
+.post-time{
+    display: inline-block;
+    color: gray;
+    margin-right: 3px;
+    font-size: 15px;
+}
+
+
+.author{
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 20px;
+    text-decoration: none;
+    vertical-align: baseline;
+    cursor: pointer;
+    position: relative;
+    left: 585px;
+    color: #6495ED;
+    top: -17px;
+}
+
+.post-img {
+    width: 50%;
+    height: 50%;
+    display: block;
+    margin: 0 auto 0;
+}
+
+
+.content{
+    margin: 0 15px 0;
+    display: block;
+    /* width: 80%; */
+    /* height: 50%; */
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 21px;
+    word-break: break-word;
+    /* overflow: auto; */
+    /* position: relative; */
+    /* right: 100px; */
+    padding-bottom: 1px;
+    margin-bottom: -1px;
+    vertical-align: middle;
+}
+
+.post-title {
+    padding-top: 23px;
+}
+
+.bottom-wrapper{
+    /* margin: 10px; */
+    /* position: relative; */
+    /* bottom: -100px; */
+    /* left: 240px; */
+    vertical-align: baseline;
+    align-items: center;
+    flex-flow: row nowrap;
+    font-size: 15px;
+    margin: 10px 15px 0;
+}
+
+.form-error{
+    color: red;
+    font-weight: 700;
+}
+
+#hi{
+}
+
+#notice{
+    text-align: center;
+    margin-top: 100px;
+    font-size: 20px;
+    /* color: #F08080; */
+}
+
+.pic:hover{
+    opacity: 0.5;
+}
+
+.comments:hover{
+    opacity: 0.9;
+    color: #F08080;
+    cursor: pointer;
+}
+
+.vppl{
+    cursor:pointer;
+}
+
+.vppl:hover{
+    color: blue;
+    opacity: 0.8;
+}
+
+.vote-people{
+    list-style: none;
+}
+
+.upvotes-wrap{
+    z-index: 1; 
+    position: fixed; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%; 
+    background-color: rgba(0,0,0,0.4); 
+    padding-top: 60px;
+    text-align: center;
+}
+
+.vote-people {
+    display: inline-block;
+    width: 500px;
+    /* height: 500px; */
+    overflow: auto;
+    max-height: 500px;
+    background: white;
+    padding: 30px;
+    top: 50px;
+    box-sizing: border-box;
+    border: 1px solid grey;
+    margin: 5% auto 15% auto;
+    text-align: start;
+    overflow-y: auto;
+}
+
+.ppl-list{
+    padding-top: 12px;
+    border-width: 1px 0 0 0;
+}
+
+
+.cross{
+    position: relative;
+    right: -426px;
+    font-size: 35px;
+    font-weight: bold;
+}
+
+.cross:hover,
+.cross:focus{
+    cursor: pointer;
+}

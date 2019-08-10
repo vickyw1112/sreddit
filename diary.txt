@@ -1,2 +1,8 @@
-25/07/19     18:00   18:15   put the first real entry in diary.txt (delete this line!)
-
+29/07/19     14:00   18:00  read sepc 
+30/07/19     14:00   18:00  read sepc 
+31/07/19     14:00   18:00  watch lecture video and try to start
+1/08/19      15:00   23:00  start login 
+4/08/19      18:00   02:00  coding
+7/08/19      18:00   02:00  coding
+8/08/19      18:00   02:00  coding
+9/08/19      18:00   02:00  coding

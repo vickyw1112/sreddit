@@ -9,8 +9,15 @@
 // your app must take an apiUrl as an argument --
 // this will allow us to verify your apps behaviour with 
 // different datasets.
+
+import { initMainPage, initLogin, initSignup, displayFeed } from './init.js'
 function initApp(apiUrl) {
-  // your app initialisation goes here
+
+    initMainPage();
+    displayFeed();
+    initLogin(); 
+    initSignup(); 
 }
+
 
 export default initApp;
