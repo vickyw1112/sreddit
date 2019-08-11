@@ -23,11 +23,11 @@ class Global(Resource):
     @posts.response(200, 'Success', post_list_details)
     @posts.doc(description='''Allows a non-auth'd user to fetch the latest 20 posts by all users.''')
     def get(self):
-        q = 'SELECT * FROM POSTS p ORDER BY p.published LIMIT 20'
+        q = 'SELECT * FROM POSTS p ORDER BY p.published DESC LIMIT 20'
 
         latest_posts = db.raw(q, [])
         latest_posts = [format_post(row) for row in latest_posts]
-        latest_posts.sort(reverse=True,key=lambda x: int(x["meta"]["published"]))
+        latest_posts.sort(reverse=True,key=lambda x: int(float(x["meta"]["published"])))
 
         return {
             'posts': latest_posts
@@ -85,7 +85,7 @@ class Post(Resource):
     @posts.response(403, 'Invalid Auth Token / Unauthorized to edit Post')
     @posts.response(400, 'Malformed Request')
     @posts.param('id','the id of the post to update')
-    @posts.expect(auth_details, new_post_details)
+    @posts.expect(auth_details, update_post_details)
     @posts.doc(description='''
         Lets you update a post without changing metadata.
         Published date, upvotes, comments etc. will be left untouched.
@@ -131,7 +131,7 @@ class Post(Resource):
             updated['src'] = src
             updated['thumbnail'] = shrink(src)
         if title:
-            updated['title'] = src
+            updated['title'] = title
         db.update('POST').set(**updated).where(id=id).execute()
         return {
             'message': 'success'
@@ -164,7 +164,7 @@ class Post(Resource):
         p = db.select('POST').where(id=id).execute()
         if p[1] != u[1]:
             abort(403,'You Are Unauthorized To Make That Request')
-        comment_list = text_list_to_set(p[7])
+        comment_list = text_list_to_set(p[8])
         [db.delete('COMMENT').where(id=c_id).execute() for c_id in comment_list]
         db.delete('POST').where(id=id).execute()
         return {
@@ -226,7 +226,7 @@ class Vote(Resource):
         if not db.exists('POST').where(id=id):
             abort(400, 'Malformed request')
         p = db.select('POST').where(id=id).execute()
-        votes = text_list_to_set(p[4],process_f=lambda x:int(x))
+        votes = text_list_to_set(p[5],process_f=lambda x:int(x))
         votes.add(u[0])
         votes = set_to_text_list(votes)
         db.update('POST').set(likes=votes).where(id=id).execute()
@@ -256,7 +256,9 @@ class Vote(Resource):
         if not db.exists('POST').where(id=id):
             abort(400, 'Malformed request')
         p = db.select('POST').where(id=id).execute()
-        votes = text_list_to_set(p[4],process_f=lambda x: int(x))
+        votes = text_list_to_set(p[5],process_f=lambda x: int(x))
+        if not u[0] in votes:
+            abort(400, 'Malformed request')
         votes.discard(u[0])
         votes = set_to_text_list(votes)
         db.update('POST').set(likes=votes).where(id=id).execute()
@@ -300,7 +302,7 @@ class Comment(Resource):
             published=str(time.time())
         ).execute()
         p = db.select('POST').where(id=id).execute()
-        comment_list = text_list_to_set(p[7],process_f=lambda x: int(x))
+        comment_list = text_list_to_set(p[8],process_f=lambda x: int(x))
         comment_list.add(comment_id)
         comment_list = set_to_text_list(comment_list)
         db.update('POST').set(comments=comment_list).where(id=id).execute()

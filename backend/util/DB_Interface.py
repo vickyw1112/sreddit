@@ -33,27 +33,27 @@ class Stub:
         self.q += " LIMIT "+n
         return self
     def execute(self):
-        self.conn = sqlite3.connect(self.conn_url)
-        c = self.conn.cursor()
+        conn = sqlite3.connect(self.conn_url)
+        c = conn.cursor()
         # since the last python update we can now
         # assume kargs are ordered :D
         c.execute(self.q,self.q_values)
         if (self.type == "EXISTS"):
             r = (c.fetchone() != None)
-            self.conn.close()
+            conn.close()
             return r
         elif (self.type == "UPDATE" or self.type == "INSERT" or self.type == "DELETE"):
-            self.conn.commit()
+            conn.commit()
             r = c.lastrowid
-            self.conn.close()
+            conn.close()
             return r
         elif (self.type == "SELECT"):
             r = c.fetchone()
-            self.conn.close()
+            conn.close()
             return r
         elif (self.type == "SELECT_ALL"):
             r = c.fetchall()
-            self.conn.close()
+            conn.close()
             return r
         raise Exception("Unknown Stub type '{}'".format(self.type))
 
@@ -91,12 +91,12 @@ class DB:
             "COMMENT": "DELETE FROM COMMENTS"
         }
     def raw(self, q, params=[]):
-        self.conn = sqlite3.connect(self.conn_url)
-        c = self.conn.cursor()
+        conn = sqlite3.connect(self.conn_url)
+        c = conn.cursor()
         c.execute(q,tuple(params))
         r = c.fetchall()
-        self.conn.commit()
-        self.conn.close()
+        conn.commit()
+        conn.close()
         return r
     def exists(self, query_name, **kargs):
         s = Stub(self.conn_url, "EXISTS", self.exist_queries[query_name])

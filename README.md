@@ -20,7 +20,7 @@ Some of the skills/concepts this assignment aims to test (and build upon):
 * Fetching data from an API
 * Infinite scroll
 * CSS Animations
-* Web Workers
+* Web Workers / Service Workers
 * Push Notifications (Polling)
 * Offline Support
 * Routing (URL fragment based routing)
@@ -166,26 +166,28 @@ In level 4 you will implement multiple subseddits where posts are organised into
 Level 2 focuses on a richer UX and will require some further backend interaction.
 
 **Show Upvotes**
-Allow an option for a user to see a list of all users who have upvoted a post.
+Allow an option for a logged in user to see a list of all users who have upvoted a post.
 Possibly a [modal](https://www.webopedia.com/TERM/M/modal_window.html) but the design is up to you.
 
 **Show Comments**
-Allow an option for a user to see all the comments on a post. Same as above.
+Allow an option for a logged in user to see all the comments on a post. Same as above.
 
 **Upvote user generated content**
 A logged in user can upvote a post on their feed and trigger a api request (`PUT /post/vote`)
 For now it's ok if the upvote doesn't show up until the page is refreshed.
 
+In addition the user can also retract their upvote, you can do this via `DELETE /post/vote`
+
 **Post new content**
-Users can upload and post new content from a [modal](https://www.webopedia.com/TERM/M/modal_window.html) or seperate page via (`POST /post`). The uploaded content can either be text, an image, or a combination of both.
+Logged in users can upload and post new content from a [modal](https://www.webopedia.com/TERM/M/modal_window.html) or seperate page via (`POST /post`). The uploaded content can either be text or text and an image.
 
 **Pagination**
-Users can page between sets of results in the feed using the position token with (`GET /user/feed`).
+Logged in users can page between sets of results in the feed using the position token with (`GET /user/feed`).
 Note users can ignore this if they properly implement Level 3's Infinite Scroll.
 
 **Profile**
-Users can see their own profile information such as username, number of posts, 
-number of upvotes across all posts, profile pic. Get this information from (`GET /user`)
+Logged in users can see their own profile information such as username, number of posts, 
+number of upvotes across all posts. Get this information from (`GET /user`)
 
 ## Level 3
 Level 3 focuses on more advanced features that will take time to implement and will
@@ -196,60 +198,62 @@ Instead of pagination, users an infinitely scroll through the "subseddit" they a
 For infinite scroll to be properly implemented you need to progressively load posts as you scroll. 
 
 **Comments**
-Users can write comments on "posts" via (`POST /post/comment`)
+Logged in users can write comments on "posts" via (`PUT /post/comment`)
 
 **Live Update**
-If a user upvotes a post or comments on a post, the posts upvotes and comments should
+If a logged in user upvotes a post or comments on a post, the posts upvotes and comments should
 update without requiring a page reload/refresh.
 
 **Update Profile**
 Users can update their personal profile via (`PUT /user`) E.g:
 * Update email address
-* Update their profile picture
 * Update password
+* etc.
 
 **User Pages**
-Let a user click on a user's name/picture from a post and see a page with the users name, 
-profile pic, and other info.
+Let a logged in user click on a user's name/picture from a post and see a page with the users name and other info.
 The user should also see on this page all posts made by that person across all "subseddits".
 The user should be able to see their own page as well.
 
 This can be done as a [modal](https://www.webopedia.com/TERM/M/modal_window.html) or as a separate page (url fragmentation can be implemented if wished.)
 
 **Follow**
-Let a user follow/unfollow another user too add/remove their posts to their feed via (`PUT user/follow`)
+Let a logged in user follow/unfollow another user too add/remove their posts to their feed via (`PUT user/follow`)
 Add a list of everyone a user follows in their profile page.
 Add just the count of followers / follows to everyones public user page
 
 **Delete/Update Post**
-Let a user update a post they made or delete it via (`DELETE /post`) or (`PUT /post`)
+Let a logged in user update a post they made or delete it via (`DELETE /post`) or (`PUT /post`)
 
 **Search functionality**
-Let a user search for a post, user or subseddit. You'll have to potentially combine a 
-few different endpoint responses to allow this. 
+Let a logged in user search for a post made by any user that they follow. You'll have to 
+potentially combine a few different endpoint responses to allow this. 
 
 ## Level 4
 This set of tasks is an extension beyond the previous levels and should only be attempted once the previous levels have been completed.
 
 **Multiple Subseddits**
-As mentioned earlier, a subseddit is denoted by a "s/" in front of the subseddit name. Users should be able to make a post to a specific subseddit (which may or may not have been posted to before). A user should also be able to view the posts made to a specific subseddit. You may choose to show this in the URL as `/s/:subseddit_name` if you wish. The original news feed - which presented the `s/all` subseddit - must still remain as the home page and must also show all posts made across all subseddits. Any post that is not posted to a specific subseddit must appear on `s/all`.
+As mentioned earlier, a subseddit is denoted by a "s/" in front of the subseddit name. Users should be able to make a post to a specific subseddit (which may or may not have been posted to before). A logged in user should also be able to view the posts made to a specific subseddit. You may choose to show this in the URL as `/s/:subseddit_name` if you wish. The original news feed - which presented the `s/all` subseddit - must still remain as the home page and must also show all posts made across all subseddits. Any post that is not posted to a specific subseddit must appear on `s/all`.
 
 **Slick UI**
 The user interface looks good, is performant, makes logical sense, and is usable. 
 
 **Push Notifications**
-Users can receive push notifications when a user they follow posts an image. Notification can be accessed at (`GET /latest`)
+Users can receive push notifications when a user they follow posts an image. There is no endpoint or websocket provided, we expect you to figure out how to do this given the existing endpoints. Notice that since we do not give you a websocket (nor teach it in the course) we are happy for you to use polling ot achieve this, i.e check if there is anything to notify the user of every 5 or so seconds.
+
+The delay is up to you, but remember you want it to look semi live without 
+overwhelming the event queue.
 
 **Offline Access**
-Users can access the "Instacram" at all times by using Web Workers to cache the page (and previous content) locally.
-
+Users can access the "Seddit" at all times by using Service Workers to cache the page (and previous content) locally.
+d
 **Fragment based URL routing**
 Users can access different pages using URL fragments:
 
 ```
-/#profile=me
+/#profile=1
 /#feed
-/#profile=janecitizen
+/#profile=420
 ```
 
 # FAQ

@@ -36,7 +36,7 @@ You can use virtual env [recommended].
 ```bash
 cd backend
 # create a sandbox for the backend 
-virtualenv -p /usr/local/bin/python3 run.py
+virtualenv -p /usr/local/bin/python3 env
 
 # enter sandbox
 source env/bin/activate

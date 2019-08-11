@@ -13,9 +13,12 @@ class User(Resource):
     @user.response(400, 'Malformed Request')
     @user.expect(auth_details)
     @user.param('id','Id of user to get information for (defaults to logged in user)')
+    @user.param('username','username of user to get information for (defaults to logged in user)')
     @user.doc(description='''
-        Gets the information for the supplied user, if not specified the
+        Gets the information for the supplied user, if neither id nor username is specified the
         user corresponding to the supplied auth token's information is returned.
+        If both are supplied the id is used first and on failure the username is used.
+        If either supplied form of identification is invalid the request is considered malformed and may be rejected.
         The response object contains a list of user_ids of the user following
         the target user and the total number of people who follow the target user.
         These are contained in the variables following and followed_num respectively.
@@ -24,17 +27,28 @@ class User(Resource):
     ''')
     def get(self):
         u = authorize(request)
-        try:
-            u_id = int(request.args.get('id',u[0]))
-        except:
-            abort(400,'Malformed Request')
+        u_id = request.args.get('id', None)
+        username = request.args.get('username', None)
 
-        if not db.exists('USER').where(id=u_id):
-            abort(400,'Malformed Request')
+        # extract information from paramtaters
+        if u_id or username:
+            try:
+                if u_id and db.exists("USER").where(id=u_id):
+                    u_id = int(u_id)
+                elif username and db.exists("USER").where(username=username):
+                    u_id = int(db.select("USER").where(username=username).execute()[0])
+                else:
+                    abort(400, 'Malformed Request')
+            except:
+                abort(400, 'Malformed Request')
+        else:
+            u_id = int(u[0])
+
+        # get information
         u = db.select('USER').where(id=u_id).execute()
         u_username = u[1]
 
-        follow_list = text_list_to_set(u[4], process_f=lambda x: int(x))
+        follow_list = text_list_to_set(u[4])
         posts_raw = db.select_all('POST').where(author=u_username).execute()
         posts = [post[0] for post in posts_raw]
         return {
@@ -116,7 +130,7 @@ class Feed(Resource):
 
         all_posts = db.raw(q,following)
         all_posts = [format_post(row) for row in all_posts]
-        all_posts.sort(reverse=True,key=lambda x: int(x["meta"]["published"]))
+        all_posts.sort(reverse=True,key=lambda x: int(float(x["meta"]["published"])))
 
         return {
             'posts': all_posts[p:p+n]
