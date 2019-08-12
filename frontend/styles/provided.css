@@ -364,8 +364,9 @@ label{
 }
 
 .vote-people {
+    border-radius: 10px;
     display: inline-block;
-    width: 500px;
+    width: 400px;
     /* height: 500px; */
     overflow: auto;
     max-height: 500px;
@@ -387,12 +388,139 @@ label{
 
 .cross{
     position: relative;
-    right: -426px;
+    right: -310px;
     font-size: 35px;
     font-weight: bold;
 }
 
+.cross-comment{
+    position: relative;
+    right: -410px;
+    font-size: 35px;
+    font-weight: bold;
+}
 .cross:hover,
-.cross:focus{
+.cross:focus,
+.cross-comment:hover{
     cursor: pointer;
+}
+
+.comment_list{
+    border-radius: 10px;
+    display: inline-block;
+    width: 500px;
+    /* height: 500px; */
+    overflow: auto;
+    max-height: 500px;
+    background: white;
+    padding: 30px;
+    top: 50px;
+    box-sizing: border-box;
+    border: 1px solid grey;
+    margin: 5% auto 15% auto;
+    text-align: start;
+    overflow-y: auto;
+}
+
+.post-form {
+    border-radius: 10px;
+    display: inline-block;
+    width: 500px;
+    /* height: 500px; */
+    overflow: auto;
+    max-height: 700px;
+    background: white;
+    padding: 30px;
+    top: 50px;
+    box-sizing: border-box;
+    border: 1px solid grey;
+    margin: 5% auto 15% auto;
+    text-align: start;
+    overflow-y: auto;
+}
+
+#community-label{
+    position: static;
+    font-size: 18px;
+    font-weight: bolder;
+}
+
+#title-label{
+    position: static;
+    font-size: 18px;
+    font-weight: bolder;
+}
+
+#community-input{
+    width: 300px;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    border: 1px soild pink;
+    font-size: 18px;
+}
+
+#post-top{
+    font-size: 28px;
+    margin: 10px 10px 20px;
+}
+
+.post-form-title-wrap{
+    margin: 20px;
+}
+
+#post-form-body-wrap{
+    margin: 20px;
+}
+
+#post-body{
+    font-size: 15px;
+}
+
+#image-wrap{
+    margin: 20px;
+}
+.img-btn{
+    background-color: white;
+    color: var(--reddit-blue);
+}
+
+.post-btn{
+    position: relative;
+    left: 356px;
+    background-color: var(--reddit-blue);
+    color: white; 
+
+}
+
+.cross-post{
+    position: relative;
+    left: 410px;
+}
+
+#post-label{
+    position: static;
+    font-size: 18px;
+    font-weight: bolder;
+}
+
+.post-body-wrap{
+    margin: 20px;
+}
+
+.profile-wrap{
+    text-align: center;
+}
+
+.info-wrap{
+    display: inline-block;
+}
+
+ul{
+    list-style: none;
+}
+
+span{
+    font-weight: bolder;
 }

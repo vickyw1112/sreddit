@@ -1,4 +1,5 @@
 import { cancelForm, validate_login, validate_signup } from './form.js'
+import API_URL from './backend_url.js'
 function initMainPage() {
     const root = document.querySelector("#root");
 
@@ -274,11 +275,11 @@ function initSignup(){
 
 function displayFeed(){
     const feed = document.getElementById("feed");
-    fetch("data/feed.json")
+    fetch(API_URL + "/post/public")
     .then(response => response.json())
     .then(data => {
         data.posts.sort(function(a, b) {
-            return a.meta.published - b.meta.published;
+            return a.meta.published > b.meta.published;
         });
         for(const item of data.posts){
             const li = document.createElement("li");

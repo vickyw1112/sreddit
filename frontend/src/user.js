@@ -1,6 +1,7 @@
 import API_URL from './backend_url.js'
-import { userMainPage } from './helper.js'
-function getFeeds(token, username){
+import { userMainPage, close_list, cur_user_id } from './helper.js'
+import { token, cur_user } from './form.js'
+function getFeeds(){
 
     fetch(API_URL + '/user/feed',{
         method: 'GET',
@@ -24,7 +25,7 @@ function getFeeds(token, username){
     .then(data => {
         console.log(data);
         console.log(token);
-        userMainPage(username, token);
+        userMainPage(cur_user);
         
         const feed = document.querySelector("#feed");
         // if no posts
@@ -32,10 +33,16 @@ function getFeeds(token, username){
             const notice = document.createElement('div');
             feed.appendChild(notice);
             notice.id = "notice";
-            notice.textContent = "you didn't have any posts yet";
+            notice.textContent = "hmm...you haven't posted anything yet";
         }
 
         else{
+            
+            // empty feed, in case
+            while(feed.childElementCount >= 2){
+                feed.removeChild(feed.lastChild);
+            }
+
             // list user's feeds
             for(const item of data.posts){
                 const li = document.createElement('li');
@@ -49,7 +56,13 @@ function getFeeds(token, username){
                 const up = document.createElement("img");
                 up.src = "images/up.svg";
                 up.className = 'pic';
+                up.classList.add('up-votes');
                 vote.appendChild(up);
+
+                // up vote
+                up.addEventListener('click', function(e){
+                    up_vote(e, item);
+                }, false);   
 
                 const num = document.createElement("p");
                 vote.appendChild(num);
@@ -59,16 +72,21 @@ function getFeeds(token, username){
                 
                 // get who upvotes cur feed
                 num.addEventListener('click', function(){
-                    var upVotes = new Array(item.meta.upvotes);
-                    console.log(upVotes);
-                    show_upvotes(token, upVotes[0]);
+                    show_upvotes(item.meta.upvotes);
                 }, false);
 
 
                 const down = document.createElement("img");
                 down.src = "images/down.svg";
                 down.className = 'pic';
+                down.classList.add('down-votes');
                 vote.appendChild(down);
+
+
+                // down vote
+                down.addEventListener('click', function(e){
+                    down_vote(e, item);
+                }, false);   
                 
                 const subtitle = document.createElement("div");
                 li.appendChild(subtitle);
@@ -122,6 +140,11 @@ function getFeeds(token, username){
                 btm.appendChild(comments);
                 comments.className = "comments";
                 comments.textContent = item.comments.length + " comments";
+
+                // show comments
+                comments.addEventListener('click', function(){
+                    show_comments(item.comments);
+                }, false);
                 
                 const au = document.createElement("div");
                 au.setAttribute("data-id-author", "");
@@ -141,14 +164,13 @@ function getFeeds(token, username){
     .catch(e => console.error('Error:', e));
 }
 
-function show_upvotes(token, users){
+function show_upvotes(users){
     var urls = [];
     users.forEach(e =>{
         var url = API_URL + '/user/?id=' + e;
         urls.push(url); 
     });
     
-    console.log(users);
     // modal
     const div = document.createElement('div');
     div.className = "upvotes-wrap";
@@ -162,6 +184,10 @@ function show_upvotes(token, users){
     cross.src = 'images/close.svg';
     ul.appendChild(cross);
     cross.title = 'close window';
+
+
+    // close window
+    div.addEventListener('click', close_list);
 
     Promise.all(urls.map(url => 
         fetch(url, {
@@ -180,18 +206,156 @@ function show_upvotes(token, users){
             }
             return res.json();
         })
-        .catch(e => console.log('Error:' + e))
+        .catch(function(e){return e;})
     ))
     .then(data => {
-        console.log(data);
         for(const usr of data){
             const li = document.createElement('li');
             ul.appendChild(li);
             li.textContent = usr.username;
             li.className = 'ppl-list';
         } 
-    });
+    })
+    .catch(e => console.log('Error:' + e));
 }
+
+function show_comments(comments){
+
+    const div = document.createElement('div');
+    div.className = "upvotes-wrap";
+    document.body.appendChild(div);
+    const content  = document.createElement('div');
+    div.appendChild(content);
+    content.className = "comment_list";
+    content.classList.add('animate');
+    const cross = document.createElement('img');
+    cross.className = 'cross-comment';
+    cross.src = 'images/close.svg';
+    content.appendChild(cross);
+    cross.title = 'close window';
+    
+    for(const item of comments){
+       const wrap = document.createElement('div');
+        content.appendChild(wrap);
+       
+        // time who
+        const topp = document.createElement('div');
+        wrap.appendChild(topp);
+        topp.className = 'top-wrapoer';
+
+        const auth = document.createElement('div');
+        topp.appendChild(auth);
+        auth.textContent = item.author;
+        auth.className = 'suseddit';
+
+        const dot = document.createElement('span');
+        topp.appendChild(dot);
+        dot.className = "dot";
+        dot.textContent = '•';
+
+        const time = document.createElement('div');
+        topp.appendChild(time);
+        time.className = 'post-time'
+
+        var date = new Date(item.published * 1000).toLocaleDateString("en-US");
+        time.textContent = date;
+
+        const body = document.createElement('div');
+        body.textContent = item.comment;
+        body.className = 'ppl-comment';
+        wrap.appendChild(body);
+        
+
+        content.appendChild(document.createElement('br'));
+    }
+    
+    const btm = document.createElement('div');
+    content.appendChild(btm);
+    btm.className = 'comment-btm';
+    const input = document.createElement('textarea');
+    input.className = 'comment-input';
+    input.placeholder = 'write a comment...';
+    input.rows = 4;
+    input.cols = 50;
+    btm.appendChild(input);
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'button';
+    btn.textContent = 'Post';
+    btm.appendChild(btn);
+
+
+    // close window
+    cross.addEventListener('click', close_list);
+
+}
+
+
+function up_vote(e, item){
+    var url = API_URL + '/post/vote/?id=' + item.id;
+    const numOfPeople = e.target.parentNode.childNodes[1];
+    if(!(item.meta.upvotes.includes(cur_user_id))){
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Token ${token}`
+            }
+        })
+        .then(res => {
+            if(res.status == 400){
+                throw new Error('400: Malformed Request');
+            }
+            else if(res.status == 403){
+                throw new Error('403: InvaildToken');
+            }
+            return res.json();
+        })
+        .then(data => {
+            //numOfPeople.textContent = (item.meta.upvotes.length + 1);
+            getFeeds();
+        })
+        .catch(e => console.log('Error:' + e));
+    }
+    else{
+    
+        numOfPeople.textContent = item.meta.upvotes.length;
+    }
+}
+
+function down_vote(e, item){
+    var url = API_URL + '/post/vote/?id=' + item.id;
+    const numOfPeople = e.target.parentNode.childNodes[1];
+
+    // if user has upvote for cur post
+    if(item.meta.upvotes.includes(cur_user_id)){
+        fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Token ${token}`
+            }
+        })
+        .then(res => {
+            if(res.status == 400){
+                throw new Error('400: Malformed Request');
+            }
+            else if(res.status == 403){
+                throw new Error('403: InvaildToken');
+            }
+            return res.json();
+        })
+        .then(data => {
+            //numOfPeople.textContent = (item.meta.upvotes.length - 1);
+            getFeeds();
+        })
+        .catch(e => console.log('Error:' + e));
+    }
+    else{
+    
+        numOfPeople.textContent = item.meta.upvotes.length;
+    }
+}
+
+
 
 
 export { getFeeds };

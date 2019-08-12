@@ -2,6 +2,8 @@ import API_URL  from './backend_url.js'
 import { getFeeds } from './user.js'
 import { userMainPage } from './helper.js'
 var token = '';              
+var cur_user = '';
+
 function validate_login(){
     const btns =  document.querySelectorAll(".login-button");
     for(const btn of btns){
@@ -42,7 +44,9 @@ function validate_login(){
                 
                 // redirect to user home page
                 // get feeds
-                getFeeds(token, name);
+                
+                cur_user = name;
+                getFeeds();
                 
             })
             .catch(e => console.error('Error:', e));
@@ -94,7 +98,9 @@ function validate_signup(){
                  
                 // redirect to user home page
                 // get feeds
-                getFeeds(token, name);
+                //
+                cur_user = name;
+                getFeeds();
                 
             })
             .catch(e => console.error('Error:', e));
@@ -114,5 +120,5 @@ function cancelForm(){
     }       
  }   
 
-export{ cancelForm, validate_login, validate_signup };
+export{ cancelForm, validate_login, validate_signup, cur_user, token };
 
