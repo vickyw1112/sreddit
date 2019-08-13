@@ -1,6 +1,7 @@
 import { cur_user, token } from './form.js'
 import API_URL from './backend_url.js'
 import { getFeeds, listUserPosts } from './user.js'
+import { initMainPage, initLogin, initSignup } from './init.js'
 
 var cur_user_id = 0;
 
@@ -73,6 +74,8 @@ function userMainPage(){
     signup.classList.add("button");
     signup.classList.add("button-secondary");
     signup.textContent = "LOG OUT";
+    
+    signup.addEventListener('click', log_out);
 
     // feed
     const main = document.createElement("main");
@@ -504,6 +507,17 @@ function back_main(){
         root.removeChild(root.firstChild);
     }
     getFeeds();
+}
+
+function log_out(){
+    const root = document.querySelector("#root");
+    while(root.firstChild){
+        root.removeChild(root.firstChild);
+    }
+
+    initMainPage();
+    initLogin();
+    initSignup();
 }
 
 

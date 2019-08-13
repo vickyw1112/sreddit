@@ -1,6 +1,7 @@
 import API_URL from './backend_url.js'
 import { userMainPage, close_list, cur_user_id } from './helper.js'
 import { token, cur_user } from './form.js'
+console.log(token);
 
 var cur_feed = 0;
 function getFeeds(){
@@ -26,8 +27,6 @@ function getFeeds(){
     })
     .then(data => {
         cur_feed = 10;
-        console.log(data);
-        console.log(token);
         userMainPage(cur_user);
         
         const feed = document.querySelector("#feed");
@@ -279,10 +278,11 @@ function infinity_scroll(){
         
         })
         .then(data => {
+            console.log(data.posts.length);
             if(data.posts.length != 0){
                 cur_feed += 10;
                 const feed = document.querySelector('#feed');
-                for(var item of data){
+                for(const item of data){
                     display(feed, item);
                 }
                 

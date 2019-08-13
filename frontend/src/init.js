@@ -273,8 +273,7 @@ function initSignup(){
 
 }
 
-function displayFeed(){
-    const feed = document.getElementById("feed");
+function displayFeed(feed){
     fetch(API_URL + "/post/public")
     .then(response => response.json())
     .then(data => {

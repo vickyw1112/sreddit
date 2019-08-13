@@ -14,7 +14,6 @@ import { initMainPage, initLogin, initSignup, displayFeed } from './init.js'
 function initApp(apiUrl) {
 
     initMainPage();
-    displayFeed();
     initLogin(); 
     initSignup(); 
 }
