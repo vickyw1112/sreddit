@@ -1,4 +1,4 @@
-import { cur_user, token } from './form.js'
+import { cur_user, token, cancelForm } from './form.js'
 import API_URL from './backend_url.js'
 import { getFeeds, listUserPosts } from './user.js'
 import { initMainPage, initLogin, initSignup } from './init.js'
@@ -367,10 +367,10 @@ function profile_page(){
     signup.setAttribute("data-id-logout", "");
     signup.classList.add("button");
     signup.classList.add("button-secondary");
-    signup.textContent = "LOG OUT";
+    signup.textContent = "EDIT";
     
     // logout
-    signup.addEventListener('click', log_out);
+    signup.addEventListener('click', edit_profile);
     
     
     const body = document.createElement('div');
@@ -491,7 +491,6 @@ function getVotesNum(ids, up){
             res += post.meta.upvotes.length;
         } 
         up.appendChild(document.createTextNode(res));
-        console.log(data);
         
         // TODO sort
         data.sort(function(a, b){
@@ -524,5 +523,129 @@ function log_out(){
     initSignup();
 }
 
+function edit_profile(){
+    var divWrap = document.createElement("div");
+    divWrap.classList.add("form-wrapper");
+    
+    var lform = document.createElement("form");
+    divWrap.appendChild(lform);
+    lform.classList.add("animate");
+    
+    var header = document.createElement("h1");
+ 
+    header.textContent = "EDIT INFO";
+    lform.appendChild(header);
+
+   
+
+    // create form entries 
+    
+    var psd  = document.createElement("label");
+    psd.textContent = "Password";
+    lform.appendChild(psd);
+    lform.appendChild(document.createElement("br"));
+
+    var input2 = document.createElement("input");
+    input2.type = "password";
+    input2.placeholder = "password";
+    input2.name = "psd";
+    lform.appendChild(input2);
+
+    lform.appendChild(document.createElement("br"));
+
+    var email = document.createElement("label");
+    email.textContent = "Email Addr";
+    lform.appendChild(email);
+    lform.appendChild(document.createElement("br"));
+
+    var input3 = document.createElement("input");
+    input3.type = "email";
+    input3.placeholder = "email address";
+    input3.name = "emailadd";
+    lform.appendChild(input3);
+
+    lform.appendChild(document.createElement("br"));
+
+    var name = document.createElement("label");
+    name.textContent = "Nickname";
+    lform.appendChild(name);
+    lform.appendChild(document.createElement("br"));
+
+    var input4 = document.createElement("input");
+    input4.type = "text";
+    input4.placeholder = "name";
+    input4.name = "nname";
+    lform.appendChild(input4);
+
+    lform.appendChild(document.createElement("br"));
+
+    var b = document.createElement("button");
+    b.classList.add("login-button");
+    b.textContent = "EDIT"
+    b.type = "button";
+    lform.appendChild(b);
+        
+    // edit
+    b.addEventListener('click', post_edit);
+    
+    var cancel = document.createElement("button");
+    cancel.classList.add("cancel-button");
+    cancel.textContent = "Cancel"
+    cancel.type = "button";
+    lform.appendChild(cancel);
+    document.body.appendChild(divWrap);
+    cancelForm();
+}
+
+function post_edit(){
+    const form = document.querySelector("form");
+    const psd = form.psd.value;
+    const nn = form.nname.value;
+    const email = form.emailadd.value; 
+
+    var payload = {};
+    if(psd != ''){
+        payload.password = psd;
+    }
+    if(nn != ''){
+        payload.name = nn;
+    }
+    if(email != ''){
+        payload.email = email;
+    }
+    
+    if(payload.length != 0){
+        fetch(API_URL + '/user/', {
+            method: 'PUT',
+            body: JSON.stringify(payload),
+            headers:{
+                'Authorization': `Token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => {
+            if(res.status == 400){
+                throw new Error('400');
+            }else if(res.status == 403){
+                throw new Error('403');
+            }
+            return res.json();
+        })
+        .then(data => {
+            // update
+            const form = document.querySelector(".form-wrapper");
+            document.body.removeChild(form) ;     
+            const root = document.querySelector("#root");
+            while(root.firstChild){
+                root.removeChild(root.firstChild);
+            }
+            profile_page();
+            
+        })
+        .catch(function(e){return e;});
+    }
+
+
+}
 
 export { userMainPage, close_list, cur_user_id };

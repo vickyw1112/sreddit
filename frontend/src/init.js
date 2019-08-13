@@ -94,7 +94,6 @@ function initLogin(){
     btn.addEventListener('click', () => {
 
         var lform = document.createElement("form");
-        lform.classList.add
         var divWrap = document.createElement("div");
         divWrap.classList.add("form-wrapper");
         
@@ -176,7 +175,6 @@ function initSignup(){
     btn.addEventListener('click', () => {
 
         var lform = document.createElement("form");
-        lform.classList.add
         var divWrap = document.createElement("div");
         divWrap.classList.add("form-wrapper");
         
