@@ -190,7 +190,7 @@ function show_comments(comments, id){
 
     btn.addEventListener('click', function(){
         post_comment(id);
-    }. false);
+    }, false);
 
 
     // close window
@@ -427,7 +427,7 @@ function listUserPosts(data, root){
         // user-pic
         au.addEventListener('click', function(){
             user_pic(item.meta.author);
-        }. false)
+        }, false)
         
         au.textContent = "Posted by " + item.meta.author;
         const wholeWrap = document.createElement("div");
