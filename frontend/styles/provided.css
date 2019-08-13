@@ -560,3 +560,15 @@ span{
     position: relative;
 }
 
+.follow-btn{
+    color: white;
+    background-color: #4CAF50; 
+    margin: 0 10px 0;
+    border: none;
+}
+
+.unfollow-btn{
+    color: white;
+    background-color: #DC143C;
+    border: none;
+}
