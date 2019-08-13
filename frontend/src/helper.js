@@ -368,7 +368,11 @@ function profile_page(){
     signup.classList.add("button");
     signup.classList.add("button-secondary");
     signup.textContent = "LOG OUT";
-
+    
+    // logout
+    signup.addEventListener('click', log_out);
+    
+    
     const body = document.createElement('div');
     body.className = 'profile-wrap';
     root.appendChild(body);
