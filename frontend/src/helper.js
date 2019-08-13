@@ -1,6 +1,6 @@
 import { cur_user, token } from './form.js'
 import API_URL from './backend_url.js'
-import { getFeeds } from './user.js'
+import { getFeeds, listUserPosts } from './user.js'
 
 var cur_user_id = 0;
 
@@ -481,10 +481,18 @@ function getVotesNum(ids, up){
     .then(data => {
         for(const post of data){
 
-            //console.log(res);
             res += post.meta.upvotes.length;
         } 
         up.appendChild(document.createTextNode(res));
+        console.log(data);
+        
+        // TODO sort
+        data.sort(function(a, b){
+            console.log(a.id);
+            return a.id - b.id;
+        });
+
+        listUserPosts(data);
 
     })
 
@@ -497,5 +505,6 @@ function back_main(){
     }
     getFeeds();
 }
+
 
 export { userMainPage, close_list, cur_user_id };
