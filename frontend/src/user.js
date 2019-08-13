@@ -26,7 +26,6 @@ function getFeeds(){
     })
     .then(data => {
         cur_feed = 10;
-        console.log(token);
         userMainPage(cur_user);
         
         const feed = document.querySelector("#feed");
@@ -109,7 +108,7 @@ function show_upvotes(users){
             li.addEventListener('click', function(){
                 close_list();
                 user_pic(usr.username);
-            });
+            }, false);
             
             li.className = 'ppl-list';
         } 
@@ -150,7 +149,7 @@ function show_comments(comments, id){
         auth.addEventListener('click', function(){
             close_list();
             user_pic(item.author);
-        });
+        }, false);
 
         const dot = document.createElement('span');
         topp.appendChild(dot);
@@ -191,7 +190,7 @@ function show_comments(comments, id){
 
     btn.addEventListener('click', function(){
         post_comment(id);
-    });
+    }. false);
 
 
     // close window
@@ -428,7 +427,7 @@ function listUserPosts(data, root){
         // user-pic
         au.addEventListener('click', function(){
             user_pic(item.meta.author);
-        })
+        }. false)
         
         au.textContent = "Posted by " + item.meta.author;
         const wholeWrap = document.createElement("div");
@@ -549,7 +548,7 @@ function display(feed, item){
     // user-pic
     au.addEventListener('click', function(){
         user_pic(item.meta.author);
-    })
+    }, false)
 
     btm.appendChild(au);
     au.textContent = "Posted by " + item.meta.author;

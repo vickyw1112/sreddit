@@ -121,6 +121,23 @@ function getCurUserId(){
     });
 }
 
+//TODO
+function getUserNameById(id, list){
+    const url = API_URL + '/user/?id=' + id;
+    fetch(url, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Token ${token}`
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        const li = document.createElement('li');
+        list.appendChild(li);
+        li.textContent = data.username;
+    });
+}
+
 function post_form(){
     const wrap = document.createElement('div');
     document.body.appendChild(wrap);
@@ -438,20 +455,26 @@ function profile_page(){
 
         getVotesNum(data.posts, up, root)
         
-        var f = document.createElement('li');
-        ul.appendChild(f);
-        var f_title = document.createElement('span');
-        f.appendChild(f_title);
-        f_title.textContent = 'Following: ';
-        f.appendChild(document.createTextNode(data.following.length));
-
-        
         var fd = document.createElement('li');
         ul.appendChild(fd);
         var fd_title = document.createElement('span');
         fd.appendChild(fd_title);
         fd_title.textContent = 'Followed: ';
         fd.appendChild(document.createTextNode(data.followed_num));
+        
+        var f = document.createElement('li');
+        ul.appendChild(f);
+        var f_title = document.createElement('span');
+        f.appendChild(f_title);
+        f_title.textContent = 'Following: ';
+        f.appendChild(document.createElement('br'));
+        var uls = document.createElement('ul');
+        f.appendChild(uls);
+        
+        for(var fol of data.following){
+            getUserNameById(fol, uls);
+        }
+        
 
     })
     .catch(e => console.log('Error', e));
@@ -494,7 +517,6 @@ function getVotesNum(ids, up, root){
         
         // TODO sort
         data.sort(function(a, b){
-            console.log(a.id);
             return a.id - b.id;
         });
         
@@ -684,6 +706,26 @@ function user_pic(name){
         topp.appendChild(h2);
         h2.textContent = data.name;
 
+        var btn = document.createElement('button');
+        btn.className = 'button';
+        btn.classList.add('follow-btn');
+        btn.textContent = 'FOLLOW'; 
+        topp.appendChild(btn);
+        btn.type = 'btn';
+        
+        btn.addEventListener('click', function(){
+            follow(data.username);
+        }, false);
+
+        var btn = document.createElement('button');
+        btn.className = 'button';
+        btn.classList.add('unfollow-btn');
+        btn.type = 'btn';
+        btn.textContent = 'UNFOLLOW'; 
+        topp.appendChild(btn);
+        btn.addEventListener('click', function(){
+            unfollow(data.username);
+        }, false);
 
         const info = document.createElement('div');
         info.className = 'info-wrap';
@@ -732,6 +774,7 @@ function user_pic(name){
         f.appendChild(f_title);
         f_title.textContent = 'Following: ';
         f.appendChild(document.createTextNode(data.following.length));
+        f.id = 'follow';
 
         
         var fd = document.createElement('li');
@@ -740,6 +783,7 @@ function user_pic(name){
         fd.appendChild(fd_title);
         fd_title.textContent = 'Followed: ';
         fd.appendChild(document.createTextNode(data.followed_num));
+        fd.id = 'followed';
 
     })
     .catch(e => console.log('Error', e));
@@ -751,4 +795,47 @@ function user_pic(name){
 
 }
 
+function follow(name){
+    
+    fetch(API_URL + '/user/follow?username=' + name, {
+        method: 'PUT',
+        headers:{
+            'Authorization': `Token ${token}`
+        } 
+    })
+    .then(res => {
+        if(res.status == 400){
+            throw new Error('400');
+        }else if(res.status == 403){
+            throw new Error('403');
+        }
+        return res.json();
+    })
+    .then(data =>{
+
+
+    })
+    .catch(e => console.log('Error', e));
+}
+
+function unfollow(name){
+    fetch(API_URL + '/user/unfollow?username=' + name, {
+        method: 'PUT',
+        headers:{
+            'Authorization': `Token ${token}`
+        } 
+    })
+    .then(res => {
+        if(res.status == 400){
+            throw new Error('400');
+        }else if(res.status == 403){
+            throw new Error('403');
+        }
+        return res.json();
+    })
+    .then(data =>{
+    })
+    .catch(e => console.log('Error', e));
+
+}
 export { userMainPage, close_list, cur_user_id, user_pic };
