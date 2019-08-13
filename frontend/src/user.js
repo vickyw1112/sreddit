@@ -1,7 +1,6 @@
 import API_URL from './backend_url.js'
 import { userMainPage, close_list, cur_user_id } from './helper.js'
 import { token, cur_user } from './form.js'
-console.log(token);
 
 var cur_feed = 0;
 function getFeeds(){
@@ -27,6 +26,7 @@ function getFeeds(){
     })
     .then(data => {
         cur_feed = 10;
+        console.log(token);
         userMainPage(cur_user);
         
         const feed = document.querySelector("#feed");
@@ -113,7 +113,7 @@ function show_upvotes(users){
     .catch(e => console.log('Error:' + e));
 }
 
-function show_comments(comments){
+function show_comments(comments, id){
 
     const div = document.createElement('div');
     div.className = "upvotes-wrap";
@@ -175,8 +175,13 @@ function show_comments(comments){
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'button';
+    btn.classList.add('comment-btn');
     btn.textContent = 'Post';
     btm.appendChild(btn);
+
+    btn.addEventListener('click', function(){
+        post_comment(id);
+    });
 
 
     // close window
@@ -278,7 +283,6 @@ function infinity_scroll(){
         
         })
         .then(data => {
-            console.log(data.posts.length);
             if(data.posts.length != 0){
                 cur_feed += 10;
                 const feed = document.querySelector('#feed');
@@ -405,7 +409,7 @@ function listUserPosts(data){
 
         // show comments
         comments.addEventListener('click', function(){
-            show_comments(item.comments);
+            show_comments(item.comments, item.id);
         }, false);
         
         const au = document.createElement("div");
@@ -521,7 +525,7 @@ function display(feed, item){
 
     // show comments
     comments.addEventListener('click', function(){
-        show_comments(item.comments);
+        show_comments(item.comments, item.id);
     }, false);
 
     const au = document.createElement("div");
@@ -537,5 +541,35 @@ function display(feed, item){
 
 }
 
+function post_comment(id){
+    const input = document.querySelector('.comment-input').value; 
+    
+    var payload = {
+        comment: input    
+    };
+
+    fetch(API_URL + '/post/comment?id=' + id, {
+        method: 'PUT',
+        body: JSON.stringify(payload),
+        headers: {
+            'Authorization': `Token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(res => {
+        if(res.status == 400){
+            throw new Error('400: Malformed Request');
+        }
+        else if(res.status == 403){
+            throw new Error('403: InvaildToken');
+        }
+        return res.json();
+    })
+    .then(data => {
+        close_list();
+        getFeeds();
+    })
+    .catch(e => console.log('Error:' + e));
+}
 
 export { getFeeds, listUserPosts };

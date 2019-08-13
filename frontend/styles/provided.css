@@ -524,3 +524,11 @@ ul{
 span{
     font-weight: bolder;
 }
+
+.comment-btn{
+    position: relative;
+    left: 345px;
+    background-color: var(--reddit-blue);
+    color: white; 
+
+}
