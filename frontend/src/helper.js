@@ -283,7 +283,6 @@ function post(){
 
         })
         .then(data => {
-           console.log(data); 
         })
         .catch(e => console.log('Error', e));
         
@@ -436,7 +435,8 @@ function profile_page(){
         var up_title = document.createElement('span');
         up.appendChild(up_title);
         up_title.textContent = 'Number of upvotes: ';
-        getVotesNum(data.posts, up)
+
+        getVotesNum(data.posts, up, root)
         
         var f = document.createElement('li');
         ul.appendChild(f);
@@ -458,7 +458,7 @@ function profile_page(){
     
 }
 
-function getVotesNum(ids, up){
+function getVotesNum(ids, up, root){
     var urls = [];
     ids.forEach(e =>{
         var url = API_URL + '/post/?id=' + e;
@@ -497,8 +497,8 @@ function getVotesNum(ids, up){
             console.log(a.id);
             return a.id - b.id;
         });
-
-        listUserPosts(data);
+        
+        listUserPosts(data, root);
 
     })
 
@@ -648,4 +648,107 @@ function post_edit(){
 
 }
 
-export { userMainPage, close_list, cur_user_id };
+function user_pic(name){
+    const div = document.createElement('div');
+    div.className = "upvotes-wrap";
+    document.body.appendChild(div);
+    const body  = document.createElement('div');
+    div.appendChild(body);
+    body.className = "userProfile_list";
+    body.classList.add('animate');
+    const cross = document.createElement('img');
+    cross.className = 'cross-pro';
+    cross.src = 'images/close.svg';
+    body.appendChild(cross);
+    cross.title = 'close window';
+    
+
+    fetch(API_URL + '/user/?username=' + name, {
+        headers:{
+            'Authorization': `Token ${token}`
+        } 
+    })
+    .then(res => {
+        if(res.status == 400){
+                throw new Error('400: Malformed Request');
+        }
+        else if(res.status == 403){
+            throw new Error('403: InvaildToken');
+        }
+        return res.json();
+    }) 
+    .then(data => {
+        const topp = document.createElement('div');
+        body.appendChild(topp);
+        const h2 = document.createElement('h2');
+        topp.appendChild(h2);
+        h2.textContent = data.name;
+
+
+        const info = document.createElement('div');
+        info.className = 'info-wrap';
+        body.appendChild(info);
+        
+
+        const ul = document.createElement('ul');
+        info.appendChild(ul);
+
+        var uname = document.createElement('li');
+        ul.appendChild(uname);
+        var uname_title = document.createElement('span');
+        uname.appendChild(uname_title);
+        uname_title.textContent = 'Username: ';
+        uname.appendChild(document.createTextNode(data.username));
+
+
+        var email = document.createElement('li');
+        ul.appendChild(email);
+        var email_title = document.createElement('span');
+        email.appendChild(email_title);
+        email_title.textContent = 'E-mail: ';
+        email.appendChild(document.createTextNode(data.email));
+
+
+        var post = document.createElement('li');
+        ul.appendChild(post);
+        var post_title = document.createElement('span');
+        post.appendChild(post_title);
+        post_title.textContent = 'Number of posts: ';
+        post.appendChild(document.createTextNode(data.posts.length));
+
+
+        var up = document.createElement('li');
+        ul.appendChild(up);
+        var up_title = document.createElement('span');
+        up.appendChild(up_title);
+        up_title.textContent = 'Number of upvotes: ';
+        
+        // list posts
+        getVotesNum(data.posts, up, body)
+        
+        var f = document.createElement('li');
+        ul.appendChild(f);
+        var f_title = document.createElement('span');
+        f.appendChild(f_title);
+        f_title.textContent = 'Following: ';
+        f.appendChild(document.createTextNode(data.following.length));
+
+        
+        var fd = document.createElement('li');
+        ul.appendChild(fd);
+        var fd_title = document.createElement('span');
+        fd.appendChild(fd_title);
+        fd_title.textContent = 'Followed: ';
+        fd.appendChild(document.createTextNode(data.followed_num));
+
+    })
+    .catch(e => console.log('Error', e));
+
+
+
+    // close window
+    cross.addEventListener('click', close_list);
+
+}
+
+export { userMainPage, close_list, cur_user_id, user_pic };

@@ -1,5 +1,5 @@
 import API_URL from './backend_url.js'
-import { userMainPage, close_list, cur_user_id } from './helper.js'
+import { userMainPage, close_list, cur_user_id, user_pic } from './helper.js'
 import { token, cur_user } from './form.js'
 
 var cur_feed = 0;
@@ -80,8 +80,6 @@ function show_upvotes(users){
     cross.title = 'close window';
 
 
-    // close window
-    div.addEventListener('click', close_list);
 
     Promise.all(urls.map(url => 
         fetch(url, {
@@ -107,10 +105,17 @@ function show_upvotes(users){
             const li = document.createElement('li');
             ul.appendChild(li);
             li.textContent = usr.username;
+            
+            li.addEventListener('click', function(){
+                close_list();
+                user_pic(usr.username);
+            });
+            
             li.className = 'ppl-list';
         } 
     })
     .catch(e => console.log('Error:' + e));
+    
 }
 
 function show_comments(comments, id){
@@ -141,6 +146,11 @@ function show_comments(comments, id){
         topp.appendChild(auth);
         auth.textContent = item.author;
         auth.className = 'suseddit';
+
+        auth.addEventListener('click', function(){
+            close_list();
+            user_pic(item.author);
+        });
 
         const dot = document.createElement('span');
         topp.appendChild(dot);
@@ -303,10 +313,8 @@ function infinity_scroll(){
 
 } 
 
-function listUserPosts(data){
+function listUserPosts(data, root){
     
-    const root = document.querySelector("#root");
-   
     const main = document.createElement("main");
     root.appendChild(main);
     main.setAttribute("role", "main");
@@ -416,6 +424,12 @@ function listUserPosts(data){
         au.setAttribute("data-id-author", "");
         au.className = "author";
         btm.appendChild(au);
+        
+        // user-pic
+        au.addEventListener('click', function(){
+            user_pic(item.meta.author);
+        })
+        
         au.textContent = "Posted by " + item.meta.author;
         const wholeWrap = document.createElement("div");
         li.appendChild(wholeWrap);
@@ -531,6 +545,12 @@ function display(feed, item){
     const au = document.createElement("div");
     au.setAttribute("data-id-author", "");
     au.className = "author";
+    
+    // user-pic
+    au.addEventListener('click', function(){
+        user_pic(item.meta.author);
+    })
+
     btm.appendChild(au);
     au.textContent = "Posted by " + item.meta.author;
     const wholeWrap = document.createElement("div");

@@ -383,6 +383,12 @@ label{
 .ppl-list{
     padding-top: 12px;
     border-width: 1px 0 0 0;
+    cursor: pointer;
+}
+
+.ppl-list:hover{
+    color: 	#ff6666;
+    opacity: 0.8;
 }
 
 
@@ -532,3 +538,25 @@ span{
     color: white; 
 
 }
+
+.userProfile_list{
+    border-radius: 10px;
+    display: inline-block;
+    width: 1200px;
+    /* height: 500px; */
+    overflow: auto;
+    max-height: 500px;
+    background: white;
+    padding: 30px;
+    top: 50px;
+    box-sizing: border-box;
+    border: 1px solid grey;
+    margin: 5% auto 15% auto;
+    text-align: start;
+    overflow-y: auto;
+}
+
+.cross-pro{
+    position: relative;
+}
+
